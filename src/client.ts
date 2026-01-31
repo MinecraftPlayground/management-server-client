@@ -12,6 +12,14 @@ export class Client<Schema extends OpenRpcSchema> {
     this.schema = schema;
   }
 
+  public get info() : Schema['info'] {
+    return this.schema.info;
+  }
+
+  public get openrpc() : string {
+    return this.schema.openrpc;
+  }
+
   public call<
     Name extends ExtractMethodNames<Schema>,
     Method = ExtractMethod<Schema, Name>
