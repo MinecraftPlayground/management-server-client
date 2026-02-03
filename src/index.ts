@@ -1,5 +1,5 @@
-import jsonRpcApiSchema from './json-rpc-api-schema.ts';
-import { defineOpenRPCDocument } from './open_rpc/spec_resolved_ref.ts';
+import schema from './json-rpc-api-schema.ts';
+import {validateDocument} from './open_rpc/validate_document.ts';
 
 
-defineOpenRPCDocument(jsonRpcApiSchema)
+validateDocument(schema)
