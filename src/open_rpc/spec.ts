@@ -1,6 +1,12 @@
 // deno-lint-ignore-file no-explicit-any
 
 /**
+ * The OpenRPC Specification defines a standard, programming language-agnostic interface description for JSON-RPC 2.0 APIs.
+ * This file contains annotated TypeScript types based on the OpenRPC meta-schema and the specification document.
+ */
+
+
+/**
  * Supported OpenRPC versions as per the specification.
 */
 export type OpenRPCVersion = "1.3.2" | "1.3.1" | "1.3.0" | "1.2.6" | "1.2.5" | "1.2.4" | "1.2.3" | "1.2.2" | "1.2.1" | "1.2.0" | "1.1.12" | "1.1.11" | "1.1.10" | "1.1.9" | "1.1.8" | "1.1.7" | "1.1.6" | "1.1.5" | "1.1.4" | "1.1.3" | "1.1.2" | "1.1.1" | "1.1.0" | "1.0.0" | "1.0.0-rc1" | "1.0.0-rc0";

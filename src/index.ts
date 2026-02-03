@@ -1,5 +1,5 @@
 import schema from './json-rpc-api-schema.ts';
-import {validateDocument} from './open_rpc/validate_document.ts';
+import {validatedOpenRPCDocument} from './open_rpc/validated_open_rpc_document.ts';
 
 
-validateDocument(schema)
+validatedOpenRPCDocument(schema)

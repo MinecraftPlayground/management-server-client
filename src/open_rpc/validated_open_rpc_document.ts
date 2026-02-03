@@ -1,17 +1,11 @@
 // deno-lint-ignore-file no-explicit-any
 
-import type {OpenRPCDocument} from './spec.ts';
-
 /**
- * The OpenRPC Specification defines a standard, programming language-agnostic interface description for JSON-RPC 2.0 APIs.
- * This file contains annotated TypeScript types based on the OpenRPC meta-schema and the specification document.
- * 
- * Enhanced with compile-time $ref validation using TypeScript generics.
+ * Enhancement wrapper function with compile-time $ref validation using TypeScript generics.
  */
 
-// ============================================================================
-// TYPE GENERICS FOR $REF VALIDATION
-// ============================================================================
+import type {OpenRPCDocument} from './spec.ts';
+
 
 /**
  * Extract component names by type
@@ -88,7 +82,7 @@ type HasInvalidRefs<Schema extends OpenRPCDocument> = [CollectInvalidRefs<Schema
  */
 export type ValidatedOpenRPCDocument<Schema extends OpenRPCDocument> = HasInvalidRefs<Schema> extends true
   ? [ 
-      'Schema contains invalid $ref(s)',
+      'Schema contains invalid $ref(s):',
       CollectInvalidRefs<Schema, Schema>
     ]
   : Schema;
@@ -97,28 +91,10 @@ export type ValidatedOpenRPCDocument<Schema extends OpenRPCDocument> = HasInvali
  * Helper function to define and validate an OpenRPC schema at compile-time.
  * TypeScript will show an error if any $ref points to a non-existent component.
  * 
- * Usage:
- * ```typescript
- * export default defineOpenRPCDocument({
- *   openrpc: "1.3.2",
- *   info: { title: "My API", version: "1.0.0" },
- *   components: {
- *     contentDescriptors: {
- *       UserId: { name: "userId", schema: { type: "string" } }
- *     }
- *   },
- *   methods: [{
- *     name: "getUser",
- *     params: [{ $ref: "#/components/contentDescriptors/UserId" }], // Valid
- *     result: { name: "user", schema: { type: "object" } }
- *   }]
- * } as const),
- * ```
- * 
- * @param schema - The OpenRPC schema with 'as const' assertion
+ * @param schema The OpenRPC schema with 'as const' assertion
  * @returns The validated schema
  */
-export function validateDocument<const Schema extends OpenRPCDocument>(
+export function validatedOpenRPCDocument<Schema extends OpenRPCDocument>(
   schema : ValidatedOpenRPCDocument<Schema>
 ) : ValidatedOpenRPCDocument<Schema> {
   return schema;
