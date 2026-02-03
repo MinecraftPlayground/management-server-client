@@ -80,7 +80,7 @@ type HasInvalidRefs<Schema extends OpenRpcDocument> = [CollectInvalidRefs<Schema
 /**
  * Validated OpenRPC Document type
  */
-export type ValidatedOpenRPCDocument<Schema extends OpenRpcDocument> = HasInvalidRefs<Schema> extends true
+export type ValidatedOpenRpcDocument<Schema extends OpenRpcDocument> = HasInvalidRefs<Schema> extends true
   ? [ 
       'Schema contains invalid $ref(s):',
       CollectInvalidRefs<Schema, Schema>
@@ -94,8 +94,8 @@ export type ValidatedOpenRPCDocument<Schema extends OpenRpcDocument> = HasInvali
  * @param schema The OpenRPC schema with 'as const' assertion
  * @returns The validated schema
  */
-export function validatedOpenRPCDocument<Schema extends OpenRpcDocument>(
-  schema : ValidatedOpenRPCDocument<Schema>
-) : ValidatedOpenRPCDocument<Schema> {
+export function validatedOpenRpcDocument<Schema extends OpenRpcDocument>(
+  schema : ValidatedOpenRpcDocument<Schema>
+) : ValidatedOpenRpcDocument<Schema> {
   return schema;
 }
