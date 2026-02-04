@@ -1,15 +1,28 @@
-import type {ResolveMethodType} from './resolve_method_types.ts';
-import type {OpenRpcDocument} from './spec.ts';
+import type { ResolveMethodType } from './resolve_method_types.ts';
+import type { MethodOrReference, OpenRpcDocument } from './spec.ts';
 
+/**
+ * Extracts and resolves parameter types for a method.
+ * Handles required vs optional parameters correctly.
+ * 
+ * @template Schema OpenRPC document schema
+ * @template Method Method object to extract parameters from
+ * 
+ * @example
+ * ```
+ * type Params = ExtractParams<Schema, Method1>
+ * // => [{ name: string, id: string }[]]
+ * ```
+ */
 export type ExtractParams<
   Schema extends OpenRpcDocument,
-  Method
-> = Method extends {params : infer Params extends readonly unknown[]}
-  ? { 
-    [Item in keyof Params] : Params[Item] extends {schema : infer SchemaValue, required : true}
-      ? ResolveMethodType<Schema, SchemaValue>
-      : Params[Item] extends {schema : infer SchemaValue}
-        ? ResolveMethodType<Schema, SchemaValue> | undefined
-        : never
-  }
+  Method extends MethodOrReference
+> = Method extends { params : infer Params extends readonly unknown[] }
+  ? {
+      [Index in keyof Params] : Params[Index] extends { schema : infer SchemaValue, required : true }
+        ? ResolveMethodType<Schema, SchemaValue>
+        : Params[Index] extends { schema : infer SchemaValue }
+          ? ResolveMethodType<Schema, SchemaValue> | undefined
+          : never
+    }
   : [];

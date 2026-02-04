@@ -1,7 +1,7 @@
 {
   "name": "@denoplayground/template",
   "version": "0.1.0",
-  "exports": {},
+  "exports": { },
   "tasks": {
     "run": {
       "description": "Run the main application.",
@@ -35,6 +35,10 @@
     ]
   },
   "lint": {
+    "plugins": [
+      "jsr:@loat-dev/lint-plugins@0.3.12/imports",
+      "jsr:@loat-dev/lint-plugins@0.3.12/arrays"
+    ],
     "rules": {
       "tags": [
         "recommended"
@@ -46,9 +50,19 @@
         "explicit-function-return-type",
         "explicit-module-boundary-types",
         "guard-for-in",
+        "no-const-assign",
         "no-eval",
+        "no-external-import",
+        "no-non-null-asserted-optional-chain",
+        "no-non-null-assertion",
+        "no-self-compare",
         "no-sparse-arrays",
-        "prefer-ascii"
+        "no-sync-fn-in-async-fn",
+        "no-throw-literal",
+        "no-undef",
+        "prefer-ascii",
+        "single-var-declarator",
+        "verbatim-module-syntax"
       ],
       "exclude": [
         "no-inferrable-types"

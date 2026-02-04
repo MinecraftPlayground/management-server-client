@@ -4,7 +4,7 @@
  * Enhancement wrapper function with compile-time $ref validation using TypeScript generics.
  */
 
-import type {OpenRpcDocument} from './spec.ts';
+import type { OpenRpcDocument } from './spec.ts';
 
 
 /**

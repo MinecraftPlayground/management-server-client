@@ -1,17 +1,22 @@
-import { ResolveMethodType } from './resolve_method_types.ts';
-import { OpenRpcDocument } from './spec.ts';
+import type { ResolveMethodType } from './resolve_method_types.ts';
+import type { MethodOrReference, OpenRpcDocument } from './spec.ts';
 
-
+/**
+ * Extracts and resolves the result type for a method.
+ * Returns void if no result is defined.
+ * 
+ * @template Schema OpenRPC document schema
+ * @template Method Method object to extract the result from
+ * 
+ * @example
+ * ```
+ * type Method1Result = ExtractResult<Schema, Method1>
+ * // => { name: string, id: string }[]
+ * ```
+ */
 export type ExtractResult<
   Schema extends OpenRpcDocument,
-  Method
-> = Method extends { result : { schema : infer S } }
-  ? ResolveMethodType<Schema, S>
+  Method extends MethodOrReference
+> = Method extends { result : { schema : infer SchemaValue } }
+  ? ResolveMethodType<Schema, SchemaValue>
   : void;
-
-// export type ExtractResult<
-//   Schema,
-//   Method
-// > = Method extends MethodObject<string, readonly ParamObject[], ResultObject<infer SchemaValue>>
-//   ? ResolveSchema<Schema, SchemaValue>
-//   : void;

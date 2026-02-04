@@ -1,15 +1,20 @@
-import type {ExtractMethodNames} from './extract_method_names.ts';
-import type {OpenRpcDocument} from './spec.ts';
+import type { ExtractMethodNames } from './extract_method_names.ts';
+import type { OpenRpcDocument } from './spec.ts';
 
 /**
- * This type generic extracts a specific method from the given `Schema`.
+ * Extracts a specific method object by name from an OpenRPC schema.
  * 
- * @template Schema Schema document
- * @template MethodName Name of the method to extract
+ * @template Schema OpenRPC document schema
+ * @template MethodName Name of the method to extract (must be a valid method name)
+ * 
+ * @example
+ * ```
+ * type Method1 = ExtractMethod<Schema, "method1">
+ * ```
  */
 export type ExtractMethod<
   Schema extends OpenRpcDocument,
   MethodName extends ExtractMethodNames<Schema>
-> = Schema extends {methods : readonly (infer MethodsArray)[]}
-  ? Extract<MethodsArray, {name : MethodName}>
+> = Schema extends { methods : readonly (infer MethodsArray)[] }
+  ? Extract<MethodsArray, { name : MethodName }>
   : never;
