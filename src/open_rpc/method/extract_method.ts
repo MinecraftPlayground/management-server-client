@@ -1,5 +1,5 @@
 import type { ExtractMethodNames } from './extract_method_names.ts';
-import type { OpenRpcDocument } from '../spec.ts';
+import type { OpenRpcDocument } from '../open_rpc_document.ts';
 
 /**
  * Extracts a specific method object by name from an OpenRPC schema.

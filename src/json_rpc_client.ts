@@ -9,6 +9,9 @@ interface JsonRpcClientOptions {
   token? : string
 }
 
+/**
+ * @template Schema OpenRPC document schema
+ */
 export class JsonRpcClient<Schema extends OpenRpcDocument> extends EventTarget {
   private readonly ws : WebSocket;
   private readonly schema : ValidatedOpenRpcDocument<Schema>;
