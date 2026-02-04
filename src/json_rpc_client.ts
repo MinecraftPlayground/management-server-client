@@ -1,6 +1,6 @@
 import type { ExtractMethod } from './open_rpc/method/extract_method.ts';
 import type { ExtractMethodNames } from './open_rpc/method/extract_method_names.ts';
-import type { ExtractParams } from './open_rpc/params/extract_params.ts';
+import type { ExtractParams } from './open_rpc/method/params/extract_params.ts';
 import type { ExtractResult } from './open_rpc/result/extract_result.ts';
 import type { MethodOrReference, OpenRpcDocument } from './open_rpc/open_rpc_document.ts';
 import { validatedOpenRpcDocument, type ValidatedOpenRpcDocument } from './open_rpc/validated_open_rpc_document.ts';
