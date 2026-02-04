@@ -1,5 +1,7 @@
 import { ExtractMethod } from './open_rpc/extract_method.ts';
 import { ExtractMethodNames } from './open_rpc/extract_method_names.ts';
+import { ExtractParams } from './open_rpc/extract_params.ts';
+import { ExtractResult } from './open_rpc/extract_result.ts';
 import { OpenRpcDocument } from './open_rpc/spec.ts';
 import { ValidatedOpenRpcDocument } from './open_rpc/validated_open_rpc_document.ts';
 
@@ -14,14 +16,14 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends EventTarget {
   constructor(
     url : string,
     schema : ValidatedOpenRpcDocument<Schema>,
-    options : JsonRpcClientOptions
+    options? : JsonRpcClientOptions
   ) {
     super();
 
     this.schema = schema
 
     this.ws = new WebSocket(url, {
-      headers: options.token ? { Authorization: `Bearer ${options.token}` } : undefined
+      headers: options?.token ? { Authorization: `Bearer ${options.token}` } : undefined
     });
 
     this.ws.addEventListener("open", () => {
@@ -45,9 +47,11 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends EventTarget {
     Name extends ExtractMethodNames<Schema>,
     Method = ExtractMethod<Schema, Name>
   >(
-    method: Name,
-    ...params: ExtractParams<Schema, Method>
+    method : Name,
+    ...params : ExtractParams<Schema, Method>
   ): Promise<ExtractResult<Schema, Method>> {
+    console.log(method, ...params);
     
+    return new Promise(() => {})
   }
 }
