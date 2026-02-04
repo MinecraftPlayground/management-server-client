@@ -304,11 +304,11 @@ export type $Ref = string;
 /**
  * Allows referencing an external resource for extended documentation.
  */
-export interface ReferenceObject<Ref extends $Ref = $Ref> {
+export interface ReferenceObject {
   /**
    * The reference string.
    */
-  $ref : Ref
+  $ref : $Ref
 }
 
 /**
