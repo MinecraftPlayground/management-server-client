@@ -7,5 +7,5 @@ validatedOpenRpcDocument(schema)
 
 const client = new JsonRpcClient('', schema)
  
-client.call('minecraft:allowlist/add', [{name: 'ReloadIt'}])
+client.call('minecraft:allowlist')
 

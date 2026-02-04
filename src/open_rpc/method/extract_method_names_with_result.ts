@@ -1,7 +1,7 @@
 import type { MethodObjectName, OpenRpcDocument } from '../open_rpc_document.ts';
 
 /**
- * Extracts all method names from an OpenRPC schema as a union type.
+ * Extracts all method names from an OpenRPC schema as a union type that have a result entry.
  * 
  * @template Schema OpenRPC document schema
  * 
@@ -11,10 +11,10 @@ import type { MethodObjectName, OpenRpcDocument } from '../open_rpc_document.ts'
  * // => "method1" | "method2" | ...
  * ```
  */
-export type ExtractMethodNames<
+export type ExtractMethodNamesWithResult<
   Schema extends OpenRpcDocument
 > = Schema extends { methods : readonly (infer Methods)[] }
-  ? Methods extends { name : infer MethodName extends MethodObjectName }
+  ? Methods extends { name : infer MethodName extends MethodObjectName, result: unknown }
     ? MethodName
     : never
   : never;
