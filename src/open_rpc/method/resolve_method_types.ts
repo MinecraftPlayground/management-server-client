@@ -1,5 +1,5 @@
-import type { ResolveRef } from './resolve_ref.ts';
-import type { $Ref, OpenRpcDocument } from './spec.ts';
+import type { ResolveRef } from '../ref/resolve_ref.ts';
+import type { $Ref, OpenRpcDocument } from '../spec.ts';
 
 /**
  * Maps JSON Schema type strings to TypeScript types.

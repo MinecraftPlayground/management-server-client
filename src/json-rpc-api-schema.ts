@@ -1,4 +1,4 @@
-import { OpenRpcDocument } from './open_rpc/spec.ts';
+import type { OpenRpcDocument } from './open_rpc/spec.ts';
 
 export default ({
   "components": {

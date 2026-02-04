@@ -1,4 +1,4 @@
-import type { MethodObjectName, OpenRpcDocument } from './spec.ts';
+import type { MethodObjectName, OpenRpcDocument } from '../spec.ts';
 
 /**
  * Extracts all method names from an OpenRPC schema as a union type.

@@ -1,4 +1,4 @@
-// deno-lint-ignore-file no-explicit-any
+// deno-lint-ignore-file no-explicit-any ban-types
 
 /**
  * The OpenRPC Specification defines a standard, programming language-agnostic interface description for JSON-RPC 2.0 APIs.
@@ -52,6 +52,11 @@ export type ContactObjectUrl = string;
 export type SpecificationExtension = any;
 
 /**
+ * Specification extension key prefixed with 'x-'.
+ */
+export type SpecificationExtensionKey = `x-${string}`
+
+/**
  * Contact information for the exposed API.
  */
 export interface ContactObject {
@@ -67,7 +72,7 @@ export interface ContactObject {
    * The URL pointing to the contact information. MUST be in the format of a URL.
    */
   url? : ContactObjectUrl,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
 
 /**
@@ -92,7 +97,7 @@ export interface LicenseObject {
    * A URL to the license used for the API. MUST be in the format of a URL.
    */
   url? : LicenseObjectUrl,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
 
 /**
@@ -123,7 +128,7 @@ export interface InfoObject {
    * The license information for the exposed API.
    */
   license? : LicenseObject,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
 
 /**
@@ -148,7 +153,7 @@ export interface ExternalDocumentationObject {
    * The URL for the target documentation. Value MUST be in the format of a URL.
    */
   url : ExternalDocumentationObjectUrl,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
 
 /**
@@ -239,7 +244,7 @@ export interface ServerObject {
    * A map between a variable name and its value.
    */
   variables? : ServerObjectVariables,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
 
 /**
@@ -293,7 +298,7 @@ export interface TagObject {
    * Additional external documentation for this tag.
    */
   externalDocs? : ExternalDocumentationObject,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
 
 /**
@@ -384,7 +389,7 @@ export interface ContentDescriptorObject {
    * Indicates if this content descriptor is deprecated.
    */
   deprecated? : ContentDescriptorObjectDeprecated,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
 
 /**
@@ -433,7 +438,7 @@ export interface ErrorObject {
    * A Primitive or Structured value that contains additional information about the error.
    */
   data? : ErrorObjectData,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
 
 /**
@@ -490,7 +495,7 @@ export interface LinkObject {
    * A server object to be used by the linked method.
    */
   server? : LinkObjectServer,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
 
 /**
@@ -553,7 +558,7 @@ export interface ExampleObject {
    * The name of the example.
    */
   name : ExampleObjectName,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
 
 /**
@@ -666,7 +671,7 @@ export interface MethodObject {
    * Additional external documentation for this method.
    */
   externalDocs? : ExternalDocumentationObject,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
 
 /**
@@ -746,7 +751,7 @@ export interface Components {
    * An object to hold reusable Tag Objects.
    */
   tags? : TagComponents,
-  [k : string] : any
+  [key : string & {}] : any
 }
 
 /**
@@ -787,5 +792,5 @@ export interface OpenRpcDocument {
    * JSON Schema URI.
    */
   $schema? : MetaSchema,
-  [regex : string] : SpecificationExtension | any
+  [key : SpecificationExtensionKey] : SpecificationExtension | any
 }
