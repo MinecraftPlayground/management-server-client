@@ -4,6 +4,7 @@ import type { MethodObjectName, OpenRpcDocument } from '../open_rpc_document.ts'
  * Extracts all method names from an OpenRPC schema as a union type that have a result entry.
  * 
  * @template Schema OpenRPC document schema
+ * @template Properties Additional properties that the method object must have
  * 
  * @example
  * ```
