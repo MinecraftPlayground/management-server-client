@@ -1,8 +1,8 @@
-import schema from '../example_schemas/json-rpc-api-schema.ts';
+import schema from '../example_schemas/json_rpc_api_schema.ts';
 import { JsonRpcClient } from './json_rpc_client.ts';
 import { validatedOpenRpcDocument } from './open_rpc/validated_open_rpc_document.ts';
 
 
 validatedOpenRpcDocument(schema)
 
-new JsonRpcClient('', schema).call('minecraft:allowlist/add', [{name: ''}])
+new JsonRpcClient('', schema).call('minecraft:bans/add', [{player: {name: ''}, reason: ''}])

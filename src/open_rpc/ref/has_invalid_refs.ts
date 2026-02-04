@@ -1,4 +1,4 @@
-import type { OpenRpcDocument } from '../spec.ts';
+import type { OpenRpcDocument } from '../open_rpc_document.ts';
 import type { CollectInvalidRefs } from './collect_invalid_refs.ts';
 
 

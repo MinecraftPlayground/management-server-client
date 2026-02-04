@@ -1,4 +1,4 @@
-import type { $Ref, OpenRpcDocument } from '../spec.ts';
+import type { $Ref, OpenRpcDocument } from '../open_rpc_document.ts';
 
 /**
  * Resolves a JSON Schema $ref string to its actual type definition.

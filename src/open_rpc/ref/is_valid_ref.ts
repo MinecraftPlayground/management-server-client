@@ -1,4 +1,4 @@
-import type { $Ref, OpenRpcDocument } from '../spec.ts';
+import type { $Ref, OpenRpcDocument } from '../open_rpc_document.ts';
 import type { ValidRefs } from './valid_refs.ts';
 
 /**
