@@ -5,7 +5,6 @@ import type { ExtractResult } from './open_rpc/result/extract_result.ts';
 import type { ExtractRequestMethodNames } from './open_rpc/method/extract_request_method_names.ts';
 import type { ExtractNotificationMethodNames } from './open_rpc/method/extract_notification_method_names.ts';
 import { validatedOpenRpcDocument, type ValidatedOpenRpcDocument } from './open_rpc/validated_open_rpc_document.ts';
-// import { CustomEventTarget } from './custom_event_target.ts';
 import { CustomEventTarget, type CustomEventListenerOrCustomEventListenerObject } from './custom_event_target.ts';
 
 
@@ -74,15 +73,15 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
     listener : CustomEventListenerOrCustomEventListenerObject<ExtractParams<Schema, ExtractMethod<Schema, MethodName>>> | null,
     options? : boolean | AddEventListenerOptions
   ) : void {
-
+    super.addEventListener(type, listener, options);
   }
 
-  override removeEventListener(
-    type : string,
-    listener : CustomEventListenerOrCustomEventListenerObject | null,
+  override removeEventListener<MethodName extends ExtractNotificationMethodNames<Schema>>(
+    type : MethodName,
+    listener : CustomEventListenerOrCustomEventListenerObject<ExtractParams<Schema, ExtractMethod<Schema, MethodName>>> | null,
     options? : boolean | EventListenerOptions
   ) : void {
-    
+    super.removeEventListener(type, listener, options);
   }
   
   /**
