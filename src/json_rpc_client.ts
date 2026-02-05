@@ -64,10 +64,7 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
     
     return new Promise(() => {})
   }
-  
-  /**
-   * Add a event listener for notification events.
-   */
+
   override addEventListener<MethodName extends ExtractNotificationMethodNames<Schema>>(
     type : MethodName,
     listener : CustomEventListenerOrCustomEventListenerObject<ExtractParams<Schema, ExtractMethod<Schema, MethodName>>> | null,
@@ -83,52 +80,4 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
   ) : void {
     super.removeEventListener(type, listener, options);
   }
-  
-  /**
-   * Standard overload for compatibility with base class.
-   */
-  // override addEventListener(
-  //   type : string,
-  //   callback : EventListenerOrEventListenerObject | null,
-  //   options? : EventListenerOptions | boolean
-  // ) : void;
-  
-  /**
-   * Implementation that handles both overloads.
-   */
-  // override addEventListener(
-  //   type : string,
-  //   callback : any,
-  //   options? : boolean | EventListenerOptions | AddEventListenerOptions
-  // ) : void {
-  //   super.addEventListener(type, callback, options);
-  // }
-
-  // override addEventListener<
-  //   MethodName extends ExtractNotificationMethodNames<Schema>
-  // >(
-  //   type : MethodName,
-  //   listener : (event : CustomEvent<ExtractMethod<Schema, MethodName>>) => void,
-  //   options? : boolean | AddEventListenerOptions
-  // ) : void {
-  //   super.addEventListener(
-  //     type, 
-  //     listener, 
-  //     options
-  //   );
-  // }
-
-  // override removeEventListener<
-  //   MethodName extends ExtractNotificationMethodNames<Schema>
-  // >(
-  //   type : MethodName,
-  //   callback : (event : CustomEvent<ExtractMethod<Schema, MethodName>>) => void,
-  //   options? : EventListenerOptions | boolean
-  // ) : void {
-  //   super.removeEventListener(
-  //     type, 
-  //     callback as EventListenerOrEventListenerObject | null, 
-  //     options
-  //   );
-  // }
 }
