@@ -48,10 +48,10 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends EventTarget {
   }
 
   public call<
-    RequestMethodName extends ExtractRequestMethodNames<Schema>,
-    Method extends ExtractMethod<Schema, RequestMethodName>
+    MethodName extends ExtractRequestMethodNames<Schema>,
+    Method extends ExtractMethod<Schema, MethodName>
   >(
-    method : RequestMethodName,
+    method : MethodName,
     ...params : ExtractParams<Schema, Method>
   ): Promise<ExtractResult<Schema, Method>> {
     this.schema.info
@@ -61,10 +61,10 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends EventTarget {
   }
 
   override addEventListener<
-    NotificationName extends ExtractNotificationMethodNames<Schema>,
-    Method extends ExtractMethod<Schema, NotificationName>
+    MethodName extends ExtractNotificationMethodNames<Schema>,
+    Method extends ExtractMethod<Schema, MethodName>
   >(
-    type : NotificationName,
+    type : MethodName,
     listener : EventListenerOrEventListenerObject | null,
     options? : boolean | AddEventListenerOptions
   ): void {
@@ -72,10 +72,10 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends EventTarget {
   }
 
   override removeEventListener<
-    NotificationName extends ExtractNotificationMethodNames<Schema>,
-    Method extends ExtractMethod<Schema, NotificationName>
+    MethodName extends ExtractNotificationMethodNames<Schema>,
+    Method extends ExtractMethod<Schema, MethodName>
   >(
-    type : NotificationName,
+    type : MethodName,
     callback : EventListenerOrEventListenerObject | null,
     options? : EventListenerOptions | boolean
   ): void {
