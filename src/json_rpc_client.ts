@@ -5,7 +5,8 @@ import type { ExtractResult } from './open_rpc/result/extract_result.ts';
 import type { ExtractRequestMethodNames } from './open_rpc/method/extract_request_method_names.ts';
 import type { ExtractNotificationMethodNames } from './open_rpc/method/extract_notification_method_names.ts';
 import { validatedOpenRpcDocument, type ValidatedOpenRpcDocument } from './open_rpc/validated_open_rpc_document.ts';
-import { CustomEventTarget } from './custom_event_target.ts';
+// import { CustomEventTarget } from './custom_event_target.ts';
+import { CustomEventTarget, type CustomEventListenerOrCustomEventListenerObject } from './custom_event_target.ts';
 
 
 /**
@@ -66,35 +67,43 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
   }
   
   /**
-   * Add a typed event listener for notification events.
+   * Add a event listener for notification events.
    */
-  override addEventListener<
-    MethodName extends ExtractNotificationMethodNames<Schema>
-  >(
+  override addEventListener<MethodName extends ExtractNotificationMethodNames<Schema>>(
     type : MethodName,
-    listener : ((event : CustomEvent<ExtractParams<Schema, ExtractMethod<Schema, MethodName>>>) => void) | null,
+    listener : CustomEventListenerOrCustomEventListenerObject<ExtractParams<Schema, ExtractMethod<Schema, MethodName>>> | null,
     options? : boolean | AddEventListenerOptions
-  ) : void;
+  ) : void {
+
+  }
+
+  override removeEventListener(
+    type : string,
+    listener : CustomEventListenerOrCustomEventListenerObject | null,
+    options? : boolean | EventListenerOptions
+  ) : void {
+    
+  }
   
   /**
    * Standard overload for compatibility with base class.
    */
-  override addEventListener(
-    type : string,
-    callback : EventListenerOrEventListenerObject | null,
-    options? : EventListenerOptions | boolean
-  ) : void;
+  // override addEventListener(
+  //   type : string,
+  //   callback : EventListenerOrEventListenerObject | null,
+  //   options? : EventListenerOptions | boolean
+  // ) : void;
   
   /**
    * Implementation that handles both overloads.
    */
-  override addEventListener(
-    type : string,
-    callback : any,
-    options? : boolean | EventListenerOptions | AddEventListenerOptions
-  ) : void {
-    super.addEventListener(type, callback, options);
-  }
+  // override addEventListener(
+  //   type : string,
+  //   callback : any,
+  //   options? : boolean | EventListenerOptions | AddEventListenerOptions
+  // ) : void {
+  //   super.addEventListener(type, callback, options);
+  // }
 
   // override addEventListener<
   //   MethodName extends ExtractNotificationMethodNames<Schema>

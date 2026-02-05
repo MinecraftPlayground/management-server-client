@@ -1,62 +1,84 @@
 /**
- * A simple EventTarget wrapper that accepts CustomEvent listeners.
- * This is a base class that allows using CustomEvent instead of Event in listeners.
- * 
- * Subclasses can override addEventListener/removeEventListener to provide
- * specific type mappings between event names and CustomEvent detail types.
+ * A function that handles a {@link CustomEvent} with a specific detail type.
+ *
+ * @template Detail Type of the `detail` property in the CustomEvent
  */
-// deno-lint-ignore-file no-explicit-any explicit-module-boundary-types
-export class CustomEventTarget extends EventTarget {
+export type CustomEventListener<Detail = unknown> =
+  (event : CustomEvent<Detail>) => void;
+
+/**
+ * An object that can handle {@link CustomEvent} events via its `handleEvent` method.
+ *
+ * @template Detail Type of the `detail` property in the CustomEvent
+ */
+export interface CustomEventListenerObject<Detail = unknown> {
   /**
-   * Add an event listener that accepts CustomEvent.
-   * This overload allows listeners to work with CustomEvent instead of plain Event.
+   * Called when an event of the specified type is dispatched.
+   *
+   * @param event Custom event being handled
    */
-  override addEventListener(
-    type: string,
-    listener: ((event: CustomEvent) => void) | null,
-    options?: boolean | AddEventListenerOptions
-  ): void;
-  
+  handleEvent(event : CustomEvent<Detail>) : void;
+}
+
+/**
+ * Union type that represents either a {@link CustomEventListener} function or a {@link CustomEventListenerObject}
+ * object.
+ *
+ * @template Detail Type of the `detail` property in the CustomEvent
+ */
+export type CustomEventListenerOrCustomEventListenerObject<Detail = unknown> =
+  | CustomEventListener<Detail>
+  | CustomEventListenerObject<Detail>
+
+/**
+ * An extended version of `EventTarget` that expects listeners to receive {@link CustomEvent} instances
+ * (instead of plain `Event`).
+ *
+ * This interface is mainly useful for better type safety when working exclusively with CustomEvent in your application.
+ *
+ * @see {@link CustomEventTarget} the constructor/cast helper
+ */
+export interface CustomEventTarget<EventType extends string = string> extends EventTarget {
   /**
-   * Standard EventTarget addEventListener overload for compatibility.
+   * Registers an event handler of a specific event type.
+   *
+   * @param type String representing the event type to listen for
+   * @param listener Object or function that receives a notification
+   * @param options Object specifying characteristics about the event listener, or a boolean indicating whether the
+   * listener should be passive
    */
-  override addEventListener(
-    type: string,
-    callback: EventListenerOrEventListenerObject | null,
-    options?: EventListenerOptions | boolean
-  ): void;
-  
-  override addEventListener(
-    type: string,
-    callback: any,
-    options?: EventListenerOptions | boolean | AddEventListenerOptions
-  ): void {
-    super.addEventListener(type, callback, options);
-  }
+  addEventListener(
+    type : EventType,
+    listener : CustomEventListenerOrCustomEventListenerObject | null,
+    options? : boolean | AddEventListenerOptions
+  ) : void;
 
   /**
-   * Remove an event listener that accepts CustomEvent.
+   * Removes an event listener previously registered with addEventListener.
+   *
+   * @param type String that specifies the event type of the listener to remove
+   * @param listener Event listener handler to remove
+   * @param options Object that specifies characteristics about the event listener to remove
    */
-  override removeEventListener(
-    type: string,
-    listener: ((event: CustomEvent) => void) | null,
-    options?: boolean | EventListenerOptions
-  ): void;
-  
-  /**
-   * Standard EventTarget removeEventListener overload for compatibility.
-   */
-  override removeEventListener(
-    type: string,
-    callback: EventListenerOrEventListenerObject | null,
-    options?: EventListenerOptions | boolean
-  ): void;
-  
-  override removeEventListener(
-    type: string,
-    callback: any,
-    options?: EventListenerOptions | boolean
-  ): void {
-    super.removeEventListener(type, callback, options);
-  }
+  removeEventListener(
+    type : EventType,
+    listener : CustomEventListenerOrCustomEventListenerObject | null,
+    options? : boolean | EventListenerOptions
+  ) : void;
+
+  dispatchEvent(event : CustomEvent) : boolean;
 }
+
+/**
+ * A constructor that allows creating instances with the {@link CustomEventTarget} interface.
+ *
+ * @example
+ * ```ts
+ * class MyClass extends CustomEventTarget { ... }
+ * ```
+ * @example
+ * ```ts
+ * const target = new CustomEventTarget();
+ * ```
+ */
+export class CustomEventTarget extends EventTarget implements CustomEventTarget {}
