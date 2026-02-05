@@ -5,6 +5,7 @@ import type { ExtractResult } from './open_rpc/result/extract_result.ts';
 import type { ExtractRequestMethodNames } from './open_rpc/method/extract_request_method_names.ts';
 import type { ExtractNotificationMethodNames } from './open_rpc/method/extract_notification_method_names.ts';
 import { validatedOpenRpcDocument, type ValidatedOpenRpcDocument } from './open_rpc/validated_open_rpc_document.ts';
+import { CustomEventTarget } from './custom_event_target.ts';
 
 
 /**
@@ -17,7 +18,7 @@ interface JsonRpcClientOptions {
 /**
  * @template Schema OpenRPC document schema
  */
-export class JsonRpcClient<Schema extends OpenRpcDocument> extends EventTarget {
+export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTarget {
   private readonly ws : WebSocket;
   private readonly schema : Schema;
   
@@ -34,21 +35,21 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends EventTarget {
       headers: options?.token ? { Authorization: `Bearer ${options.token}` } : undefined
     });
 
-    this.ws.addEventListener("open", () => {
-      this.dispatchEvent(new Event("open"));
-    });
+    // this.ws.addEventListener("open", () => {
+    //   this.dispatchEvent(new Event("open"));
+    // });
 
-    this.ws.addEventListener("close", (event) => {
-      this.dispatchEvent(event);
-    });
+    // this.ws.addEventListener("close", (event) => {
+    //   this.dispatchEvent(event);
+    // });
 
-    this.ws.addEventListener("error", (event) => {
-      this.dispatchEvent(event);
-    });
+    // this.ws.addEventListener("error", (event) => {
+    //   this.dispatchEvent(event);
+    // });
 
-    this.ws.addEventListener("message", (event) => {
-      this.dispatchEvent(event);
-    });
+    // this.ws.addEventListener("message", (event) => {
+    //   this.dispatchEvent(event);
+    // });
   }
 
   public call<
@@ -63,26 +64,63 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends EventTarget {
     
     return new Promise(() => {})
   }
-
+  
+  /**
+   * Add a typed event listener for notification events.
+   */
   override addEventListener<
-    MethodName extends ExtractNotificationMethodNames<Schema>,
-    Method extends ExtractMethod<Schema, MethodName>
+    MethodName extends ExtractNotificationMethodNames<Schema>
   >(
     type : MethodName,
-    listener : EventListenerOrEventListenerObject | null,
+    listener : ((event : CustomEvent<ExtractParams<Schema, ExtractMethod<Schema, MethodName>>>) => void) | null,
     options? : boolean | AddEventListenerOptions
-  ): void {
-    super.addEventListener(type, listener, options);
-  }
-
-  override removeEventListener<
-    MethodName extends ExtractNotificationMethodNames<Schema>,
-    Method extends ExtractMethod<Schema, MethodName>
-  >(
-    type : MethodName,
+  ) : void;
+  
+  /**
+   * Standard overload for compatibility with base class.
+   */
+  override addEventListener(
+    type : string,
     callback : EventListenerOrEventListenerObject | null,
     options? : EventListenerOptions | boolean
-  ): void {
-    super.removeEventListener(type, callback, options);
+  ) : void;
+  
+  /**
+   * Implementation that handles both overloads.
+   */
+  override addEventListener(
+    type : string,
+    callback : any,
+    options? : boolean | EventListenerOptions | AddEventListenerOptions
+  ) : void {
+    super.addEventListener(type, callback, options);
   }
+
+  // override addEventListener<
+  //   MethodName extends ExtractNotificationMethodNames<Schema>
+  // >(
+  //   type : MethodName,
+  //   listener : (event : CustomEvent<ExtractMethod<Schema, MethodName>>) => void,
+  //   options? : boolean | AddEventListenerOptions
+  // ) : void {
+  //   super.addEventListener(
+  //     type, 
+  //     listener, 
+  //     options
+  //   );
+  // }
+
+  // override removeEventListener<
+  //   MethodName extends ExtractNotificationMethodNames<Schema>
+  // >(
+  //   type : MethodName,
+  //   callback : (event : CustomEvent<ExtractMethod<Schema, MethodName>>) => void,
+  //   options? : EventListenerOptions | boolean
+  // ) : void {
+  //   super.removeEventListener(
+  //     type, 
+  //     callback as EventListenerOrEventListenerObject | null, 
+  //     options
+  //   );
+  // }
 }

@@ -10,5 +10,5 @@ const client = new JsonRpcClient('', schema)
 client.call('minecraft:allowlist')
 
 client.addEventListener('minecraft:notification/allowlist/added', (event) => {
-
+  event.detail
 })
