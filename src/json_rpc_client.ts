@@ -21,6 +21,7 @@ interface JsonRpcClientOptions {
 export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTarget {
   private readonly ws : WebSocket;
   private readonly schema : Schema;
+  private requestId : number = 0;
   
   constructor(
     url : string,
@@ -35,21 +36,25 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
       headers: options?.token ? { Authorization: `Bearer ${options.token}` } : undefined
     });
 
-    // this.ws.addEventListener("open", () => {
-    //   this.dispatchEvent(new Event("open"));
-    // });
+    this.ws.addEventListener("open", () => {
+      console.log('Client connected');
+    });
 
-    // this.ws.addEventListener("close", (event) => {
-    //   this.dispatchEvent(event);
-    // });
+    this.ws.addEventListener("close", () => {
+      console.log('Client disconnected');
+      
+    });
 
-    // this.ws.addEventListener("error", (event) => {
-    //   this.dispatchEvent(event);
-    // });
+    this.ws.addEventListener("error", (event) => {
+      console.log('Client error:', event)
+    });
 
-    // this.ws.addEventListener("message", (event) => {
-    //   this.dispatchEvent(event);
-    // });
+    this.ws.addEventListener("message", (event) => {
+      this.handleMessage(event)
+    });
+  }
+  private handleMessage(event : MessageEvent) : void {
+    console.log(event.data);
   }
 
   public call<
@@ -58,8 +63,7 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
   >(
     method : MethodName,
     ...params : ExtractParams<Schema, Method>
-  ): Promise<ExtractResult<Schema, Method>> {
-    this.schema.info
+  ) : Promise<ExtractResult<Schema, Method>> {
     console.log(method, ...params);
     
     return new Promise(() => {})
