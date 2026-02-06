@@ -1,9 +1,11 @@
 // deno-lint-ignore-file no-explicit-any
 import type { ExtractMethod } from '../open_rpc/method/extract_method.ts';
+import type { ExtractMethodNames } from '../open_rpc/method/extract_method_names.ts';
 import type { ExtractNotificationMethodNames } from '../open_rpc/method/extract_notification_method_names.ts';
 import type { ExtractRequestMethodNames } from '../open_rpc/method/extract_request_method_names.ts';
 import type { ExtractParams } from '../open_rpc/method/params/extract_params.ts';
 import type { OpenRpcDocument } from '../open_rpc/open_rpc_document.ts';
+import type { ExtractResult } from '../open_rpc/result/extract_result.ts';
 
 
 export interface JsonRpcObject {
@@ -15,6 +17,10 @@ export interface JsonRpcObject {
 
 /**
  * https://jsonrpc.org/specification#request_object
+ * 
+ * @template Schema OpenRPC document schema
+ * @template MethodName Name of the request method (must be a valid request method name)
+ * 
  */
 export interface RequestObject<
   Schema extends OpenRpcDocument,
@@ -40,6 +46,9 @@ export interface RequestObject<
 
 /**
  * https://jsonrpc.org/specification#notification
+ * 
+ * @template Schema OpenRPC document schema
+ * @template MethodName Name of the notification method (must be a valid notification method name)
  */
 export type NotificationObject<
   Schema extends OpenRpcDocument,
@@ -79,12 +88,18 @@ export interface ErrorObject {
 
 /**
  * https://www.jsonrpc.org/specification#response_object
+ * 
+ * @template Schema OpenRPC document schema
+ * @template MethodName Name of the method (must be a valid method name)
  */
-export interface ResponseObject extends JsonRpcObject {
+export interface ResponseObject<
+  Schema extends OpenRpcDocument,
+  MethodName extends ExtractMethodNames<Schema>
+> extends JsonRpcObject {
   /**
    * The value of this member is determined by the method invoked on the Server.
    */
-  result : any,
+  result : ExtractResult<Schema, ExtractMethod<Schema, MethodName>>,
   /**
    * The value for this member MUST be an {@link ErrorObject}.
    */
