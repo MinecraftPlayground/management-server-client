@@ -42,7 +42,7 @@ type IncomingMessage<Schema extends OpenRpcDocument> =
  */
 export class Client<Schema extends OpenRpcDocument> extends CustomEventTarget {
   private readonly ws : WebSocket;
-  private readonly schema : Schema;
+  public readonly schema : Schema;
   private readonly pendingRequests : Map<
     number,
     PendingRequest<Schema, ExtractRequestMethodNames<Schema>>
