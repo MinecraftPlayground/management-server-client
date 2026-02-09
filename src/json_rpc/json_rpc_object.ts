@@ -7,7 +7,9 @@ import type { ExtractParams } from '../open_rpc/method/params/extract_params.ts'
 import type { OpenRpcDocument } from '../open_rpc/open_rpc_document.ts';
 import type { ExtractResult } from '../open_rpc/result/extract_result.ts';
 
-
+/**
+ * https://jsonrpc.org/specification
+ */
 export interface JsonRpcObject {
   /**
    * A String specifying the version of the JSON-RPC protocol. MUST be exactly "2.0".
