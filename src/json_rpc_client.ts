@@ -88,6 +88,12 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
     });
   }
 
+  /**
+   * Handles incoming notification messages.
+   * Dispatches a CustomEvent for the notification method.
+   * 
+   * @param data Notification object from server
+   */
   private handleNotification(data : NotificationObject<Schema, ExtractNotificationMethodNames<Schema>>) : void {
     const event = new CustomEvent(data.method, {
       detail: data.params || []
@@ -95,6 +101,12 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
     this.dispatchEvent(event);
   }
 
+  /**
+   * Handles incoming response messages.
+   * Resolves or rejects the corresponding pending request promise.
+   * 
+   * @param data Response object from server
+   */
   private handleResponse(data : ResponseObject<Schema, ExtractRequestMethodNames<Schema>>) : void {
     const pending = this.pendingRequests.get(data.id as number);
     
@@ -112,6 +124,12 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
     }
   }
 
+  /**
+   * Handles incoming WebSocket messages.
+   * Parses JSON-RPC messages and routes them to appropriate handlers.
+   * 
+   * @param event WebSocket message event
+   */
   private handleMessage(event : MessageEvent) : void {
     try {
       const data : IncomingMessage<Schema> = JSON.parse(event.data);
@@ -132,6 +150,25 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
     }
   }
 
+  /**
+   * Calls a JSON-RPC method on the server.
+   * Returns a type-safe promise based on the method's result type.
+   * 
+   * @template MethodName Name of the method to call
+   * @template Method Method object type
+   * @param method Name of the method to invoke
+   * @param params Method parameters (type-checked based on schema)
+   * @returns Promise that resolves with the method's result type
+   * 
+   * @example
+   * ```ts
+   * // Get allowlist (returns Player[])
+   * const allowlist = await client.call('minecraft:allowlist');
+   * 
+   * // Set difficulty (requires difficulty parameter)
+   * const result = await client.call('minecraft:serversettings/difficulty/set', 'hard');
+   * ```
+   */
   public call<
     MethodName extends ExtractRequestMethodNames<Schema>,
     Method extends ExtractMethod<Schema, MethodName>
@@ -166,6 +203,24 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
     });
   }
 
+  /**
+   * Registers an event listener for server notifications.
+   * Type-safe listener with correct parameter types based on notification schema.
+   * 
+   * @template MethodName Name of the notification method
+   * @param type Notification method name
+   * @param listener Event listener callback
+   * @param options Event listener options
+   * 
+   * @example
+   * ```ts
+   * client.addEventListener('minecraft:notification/players/joined', (event) => {
+   *   // event.detail is type-checked as [{ player: Player }]
+   *   const [{ player }] = event.detail;
+   *   console.log(`Player ${player.name} joined`);
+   * });
+   * ```
+   */
   override addEventListener<MethodName extends ExtractNotificationMethodNames<Schema>>(
     type : MethodName,
     listener : CustomEventListenerOrCustomEventListenerObject<ExtractParams<Schema, ExtractMethod<Schema, MethodName>>> | null,
@@ -174,6 +229,14 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
     super.addEventListener(type, listener, options);
   }
 
+  /**
+   * Removes an event listener for server notifications.
+   * 
+   * @template MethodName Name of the notification method
+   * @param type Notification method name
+   * @param listener Event listener callback to remove
+   * @param options Event listener options
+   */
   override removeEventListener<MethodName extends ExtractNotificationMethodNames<Schema>>(
     type : MethodName,
     listener : CustomEventListenerOrCustomEventListenerObject<ExtractParams<Schema, ExtractMethod<Schema, MethodName>>> | null,
