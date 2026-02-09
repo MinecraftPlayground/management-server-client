@@ -42,12 +42,12 @@ type IncomingMessage<Schema extends OpenRpcDocument> =
  */
 export class Client<Schema extends OpenRpcDocument> extends CustomEventTarget {
   private readonly ws : WebSocket;
-  public readonly schema : Schema;
   private readonly pendingRequests : Map<
-    number,
-    PendingRequest<Schema, ExtractRequestMethodNames<Schema>>
+  number,
+  PendingRequest<Schema, ExtractRequestMethodNames<Schema>>
   > = new Map();
   private requestId : number = 0;
+  public readonly schema : Schema;
   
   constructor(
     url : string,
