@@ -59,7 +59,7 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
 
     this.schema = validatedOpenRpcDocument(schema);
 
-    this.ws = new WebSocket(url, {
+    this.ws = new WebSocket(`ws://${url}`, {
       headers: options?.token ? { Authorization: `Bearer ${options.token}` } : undefined
     });
 
@@ -150,6 +150,13 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
     }
   }
 
+  public get connected() : Promise<boolean> {
+    return new Promise((resolve) => {
+      this.ws.addEventListener('open', () => resolve(true), { once: true });
+      this.ws.addEventListener('error', () => resolve(false), { once: true });
+    });
+  }
+
   /**
    * Calls a JSON-RPC method on the server.
    * Returns a type-safe promise based on the method's result type.
@@ -203,6 +210,9 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
     });
   }
 
+  public disconnect() : void {
+    this.ws.close();
+  }
   /**
    * Registers an event listener for server notifications.
    * Type-safe listener with correct parameter types based on notification schema.
@@ -221,7 +231,7 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
    * });
    * ```
    */
-  override addEventListener<MethodName extends ExtractNotificationMethodNames<Schema>>(
+  public override addEventListener<MethodName extends ExtractNotificationMethodNames<Schema>>(
     type : MethodName,
     listener : CustomEventListenerOrCustomEventListenerObject<ExtractParams<Schema, ExtractMethod<Schema, MethodName>>> | null,
     options? : boolean | AddEventListenerOptions
@@ -237,7 +247,7 @@ export class JsonRpcClient<Schema extends OpenRpcDocument> extends CustomEventTa
    * @param listener Event listener callback to remove
    * @param options Event listener options
    */
-  override removeEventListener<MethodName extends ExtractNotificationMethodNames<Schema>>(
+  public override removeEventListener<MethodName extends ExtractNotificationMethodNames<Schema>>(
     type : MethodName,
     listener : CustomEventListenerOrCustomEventListenerObject<ExtractParams<Schema, ExtractMethod<Schema, MethodName>>> | null,
     options? : boolean | EventListenerOptions
